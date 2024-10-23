@@ -124,10 +124,10 @@ pipeline {
       }
       stage('4. Docker Image Build') {
         steps {
-          sh "aws ecr-public get-login-password --region us-east-1  | docker login --username AWS --password-stdin ${aws_account}.public.ecr.aws/f5z9p3h0"
+          sh "aws ecr-public get-login-password --region us-east-1  | docker login --username AWS --password-stdin ${aws_account}.711387106052.dkr.ecr.us-west-2.amazonaws.com"
           sh "docker build -t addressbook ."
-          sh "docker tag addressbook:latest ${aws_account}.public.ecr.aws/f5z9p3h0/addressbook:${params.ecr_tag}"
-          sh "docker push ${aws_account}.public.ecr.aws/f5z9p3h0/addressbook:${params.ecr_tag}"
+          sh "docker tag addressbook:latest ${aws_account}.711387106052.dkr.ecr.us-west-2.amazonaws.com/addressbook:latest${params.ecr_tag}"
+          sh "docker push ${aws_account}.711387106052.dkr.ecr.us-west-2.amazonaws.com/addressbook:latest${params.ecr_tag}"
         }
       }
       stage('5. Application Deployment in EKS') {
