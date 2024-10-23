@@ -13,7 +13,7 @@ pipeline {
     stages {
     stage('1. Git Checkout') {
       steps {
-        git branch: 'release', credentialsId: 'Github-pat', url: 'https://github.com/ndiforfusi/addressbook.git'
+        git branch: 'release', credentialsId: 'PAT-project', url: 'https://github.com/hermann-cyber/addressbook.git'
       }
     }
     stage('2. Build with Maven') { 
@@ -26,25 +26,25 @@ pipeline {
                 scannerHome = tool 'SonarQube-Scanner-6.2.1'
             }
             steps {
-              withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+              withCredentials([string(credentialsId: 'sonarqube-credentials', variable: 'SONAR_TOKEN')]) {
                       sh """
                       ${scannerHome}/bin/sonar-scanner  \
-                      -Dsonar.projectKey=addressbook-application \
-                      -Dsonar.projectName='addressbook-application' \
-                      -Dsonar.host.url=https://sonarqube.dominionsystem.org \
-                      -Dsonar.token=${SONAR_TOKEN} \
-                      -Dsonar.sources=src/main/java/ \
-                      -Dsonar.java.binaries=target/classes \
+                       -Dsonar.projectKey=addressbook-app \
+                       -Dsonar.projectName='addressbook app' \
+                      -Dsonar.host.url=http://35.89.134.204:9000 \
+                       -Dsonar.token=${SONAR_TOKEN} \
+                       -Dsonar.sources=src/main/java/ \
+                       -Dsonar.java.binaries=target/classes \
                      """
                   }
               }
         }
     stage('4. Docker Image Build') {
       steps {
-          sh "aws ecr get-login-password --region us-west-2 | sudo docker login --username AWS --password-stdin ${aws_account}.dkr.ecr.us-west-2.amazonaws.com"
+          sh "aws ecr get-login-password --region us-west-2 | sudo docker login --username AWS --password-stdin ${aws_account}.public.ecr.aws/f5z9p3h0"
           sh "sudo docker build -t addressbook ."
-          sh "sudo docker tag addressbook:latest ${aws_account}.dkr.ecr.us-west-2.amazonaws.com/addressbook:${params.ecr_tag}"
-          sh "sudo docker push ${aws_account}.dkr.ecr.us-west-2.amazonaws.com/addressbook:${params.ecr_tag}"
+          sh "sudo docker tag addressbook:latest ${aws_account}.public.ecr.aws/f5z9p3h0/addressbook:${params.ecr_tag}"
+          sh "sudo docker push ${aws_account}.public.ecr.aws/f5z9p3h0/addressbook:${params.ecr_tag}"
       }
     }
 
@@ -68,13 +68,13 @@ pipeline {
 
     stage('7. Email Notification') {
       steps {
-        mail bcc: 'fusisoft@gmail.com', body: '''Build is Over. Check the application using the URL below:
+        mail bcc: 'ngwahermann@gmail.com', body: '''Build is Over. Check the application using the URL below:
          https://app.dominionsystem.org/addressbook-1.0
          Let me know if the changes look okay.
          Thanks,
          Dominion System Technologies,
          +1 (313) 413-1477''', 
-         subject: 'Application was Successfully Deployed!!', to: 'fusisoft@gmail.com'
+         subject: 'Application was Successfully Deployed!!', to: 'ngwahermann@gmail.com'
       }
     }
   }
