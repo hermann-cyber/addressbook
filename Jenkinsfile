@@ -43,8 +43,8 @@ pipeline {
       steps {
           sh "aws ecr-public get-login-password --region us-east-1  | sudo docker login --username AWS --password-stdin ${aws_account}.public.ecr.aws/f5z9p3h0"
           sh "sudo docker build -t addressbook ."
-          sh "sudo docker tag addressbook:latest ${aws_account}.public.ecr.aws/f5z9p3h0/addressbook:${params.ecr_tag}"
-          sh "sudo docker push ${aws_account}.public.ecr.aws/f5z9p3h0/addressbook:latest ${params.ecr_tag}"
+          sh "sudo docker tag addressbook: ${aws_account}.public.ecr.aws/f5z9p3h0/addressbook:${params.ecr_tag}"
+          sh "sudo docker push ${aws_account}.public.ecr.aws/f5z9p3h0/addressbook:${params.ecr_tag}"
       }
     }
 
