@@ -150,7 +150,7 @@ pipeline {
         steps {
           mail bcc: 'ngwahermann@gmail.com', body: '''Build is Over. Check the application using the URL below:
           https://app.dominionsystem.org/addressbook-1.0
-          Let me/us know if the changes look okay.
+          Let me  know if the changes look okay.
           Thank,
           Dominion System Technologies,
           +1 (313) 413-1477''', 
