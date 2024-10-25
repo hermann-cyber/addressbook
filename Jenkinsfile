@@ -126,8 +126,9 @@ pipeline {
         steps {
           sh "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/f5z9p3h0"
           sh "docker build -t addressbook ."
-          sh "docker tag addressbook:latest public.ecr.aws/f5z9p3h0/addressbook:latest"
-          sh "docker push public.ecr.aws/f5z9p3h0/addressbook:latest"
+          sh "docker tag addressbook:latest public.ecr.aws/f5z9p3h0/addressbook:${params.ecr_tag}"
+          sh "docker push public.ecr.aws/f5z9p3h0/addressbook:${params.ecr_tag}"
+        }
         }
       }
       stage('5. Application Deployment in EKS') {
