@@ -84,7 +84,7 @@
 pipeline { 
     agent { node { label "maven-sonarqube-node" } }   
     parameters {
-      choice(name: 'aws_account', choices: ['999568710647', '4568366404742', '922266408974', '576900672829'], description: 'AWS account hosting image registry')
+      // choice(name: 'aws_account', choices: ['999568710647', '4568366404742', '922266408974', '576900672829'], description: 'AWS account hosting image registry')
       choice(name: 'Environment', choices: ['Dev', 'QA', 'UAT', 'Prod'], description: 'Target environment for deployment')
       string(name: 'ecr_tag', defaultValue: '1.7.0', description: 'Assign the ECR tag version for the build')
     }
@@ -133,15 +133,14 @@ pipeline {
       }
       stage('5. Application Deployment in EKS') {
         steps {
-         withKubeConfig([caCertificate: '', credentialsId: 'kubeconfig', serverUrl: ''])
-      {
+         withKubeConfig([caCertificate: '', credentialsId: 'kubeconfig', serverUrl: '']){
             sh "kubectl apply -f manifest"
           }
         }
       }
       stage('6. Monitoring Solution Deployment in EKS') {
         steps {
-      {
+        withKubeConfig([caCertificate: '', credentialsId: 'kubeconfig', serverUrl: '']) {
             sh "kubectl apply -k monitoring"
             sh("script/install_helm.sh") 
             sh("script/install_prometheus.sh")
