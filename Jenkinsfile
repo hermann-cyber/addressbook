@@ -47,31 +47,18 @@ pipeline {
             }
 
             steps {
-
               withCredentials([string(credentialsId: 'sonarqube-credentials', variable: 'SONAR_TOKEN')]) {
-
                       sh """
-
                       ${scannerHome}/bin/sonar-scanner  \
-
                       -Dsonar.projectKey=addressbook \
-
                       -Dsonar.projectName='addressbook' \
-
-                      -Dsonar.host.url=http://35.167.215.27:9000 \
-
+                      -Dsonar.host.url=http://35.93.46.119:9000 \
                       -Dsonar.token=${SONAR_TOKEN} \
-
                       -Dsonar.sources=src/main/java/ \
-
                       -Dsonar.java.binaries=target/classes \
-
                      """
-
                   }
-
               }
-
         }
 
     stage('4. Docker Image Build') {
